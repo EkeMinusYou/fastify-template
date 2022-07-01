@@ -17,10 +17,10 @@ const opts: RouteShorthandOptions = {
   }
 }
 
-fastify.register(async () => {
-  fastify.get('/ping', opts, async (request, reply) => {
+void fastify.register(() => {
+  fastify.get('/ping', opts, (_request, _reply) => {
     return { pong: 'it worked!' }
   })
 })
 
-fastify.listen({port: 3000})
+void fastify.listen({port: 3000});
