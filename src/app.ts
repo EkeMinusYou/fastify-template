@@ -1,26 +1,16 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
+import Fastify, { FastifyInstance} from 'fastify'
 
-const fastify: FastifyInstance = Fastify({})
+const fastify: FastifyInstance = Fastify()
 
-const opts: RouteShorthandOptions = {
-  schema: {
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          pong: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
+// cause error when there is no `async`. why??
+// eslint-disable-next-line @typescript-eslint/require-await
+async function routes (fastify: FastifyInstance) {
+  fastify.get('/', () => {
+    return { hello: 'world!' }
+  })
 }
 
-void fastify.register(() => {
-  fastify.get('/ping', opts, (_request, _reply) => {
-    return { pong: 'it worked!' }
-  })
-})
+void fastify.register(routes)
 
-void fastify.listen({port: 3000});
+void fastify.listen({port: 3000})
+
