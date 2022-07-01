@@ -1,6 +1,6 @@
 import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
 
-const server: FastifyInstance = Fastify({})
+const fastify: FastifyInstance = Fastify({})
 
 const opts: RouteShorthandOptions = {
   schema: {
@@ -17,17 +17,10 @@ const opts: RouteShorthandOptions = {
   }
 }
 
-server.get('/ping', opts, async (request, reply) => {
-  return { pong: 'it worked!' }
+fastify.register(async () => {
+  fastify.get('/ping', opts, async (request, reply) => {
+    return { pong: 'it worked!' }
+  })
 })
 
-const start = async () => {
-  try {
-    await server.listen({ port: 3000 })
-  } catch (err) {
-    server.log.error(err)
-    process.exit(1)
-  }
-}
-
-start()
+fastify.listen({port: 3000})
