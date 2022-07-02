@@ -2,16 +2,18 @@ import Fastify, { FastifyInstance} from 'fastify'
 
 const fastify: FastifyInstance = Fastify()
 
-async function routes (fastify: FastifyInstance): Promise<void> {
-  fastify.get('/', () => {
-    return { hello: 'world!' }
-  })
-}
-
-void fastify.register(routes)
-
-void fastify.listen({port: 3000}, (err, address) => {
-  if (err) throw err
-  console.log(`Server is now listening on ${address}`)
+fastify.get('/', () => {
+  return { hello: 'world!' }
 })
 
+const start = async () => {
+  try {
+    const address = await fastify.listen({ port: 3000 })
+    console.log(`Server is now listening on ${address}`)
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
+
+void start()
